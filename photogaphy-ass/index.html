@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mansi's Gallery</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+
+    /* RESET */
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      scroll-behavior:smooth;
+    }
+
+    body{
+      font-family:'Inter', sans-serif;
+      background:linear-gradient(135deg,#fceff9,#f8edff,#fef6e4);
+      color:#333;
+      transition:0.4s ease;
+    }
+
+    /* DARK MODE */
+    body.dark{
+      background:#0f0f14;
+      color:#eee;
+    }
+
+    /* HEADER */
+    header{
+      text-align:center;
+      padding:100px 20px 60px;
+    }
+
+    header h1{
+      font-family:'Playfair Display', serif;
+      font-size:60px;
+      letter-spacing:4px;
+    }
+
+    header p{
+      margin-top:12px;
+      font-size:14px;
+      color:#777;
+    }
+
+    /* NAVBAR */
+    .navbar{
+      display:flex;
+      justify-content:center;
+      gap:50px;
+      padding:20px;
+      backdrop-filter:blur(10px);
+      position:sticky;
+      top:0;
+      z-index:100;
+    }
+
+    .navbar a{
+      text-decoration:none;
+      color:#444;
+      font-weight:500;
+      position:relative;
+    }
+
+    .navbar a::after{
+      content:'';
+      position:absolute;
+      left:0;
+      bottom:-5px;
+      width:0%;
+      height:2px;
+      background:#e5989b;
+      transition:0.3s;
+    }
+
+    .navbar a:hover::after{
+      width:100%;
+    }
+
+    /* SECTION */
+    .section{
+      padding:100px 12%;
+      opacity:0;
+      transform:translateY(40px);
+      transition:1s ease;
+    }
+
+    .section.show{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    .section h2{
+      font-family:'Playfair Display', serif;
+      font-size:32px;
+      margin-bottom:40px;
+      text-transform:uppercase;
+      letter-spacing:3px;
+    }
+
+    /* GALLERY */
+    .gallery{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:30px;
+    }
+
+    .image-box{
+      position:relative;
+      overflow:hidden;
+      border-radius:15px;
+      cursor:pointer;
+    }
+
+    .image-box img{
+      width:100%;
+      height:380px;
+      object-fit:cover;
+      transition:0.5s;
+    }
+
+    .image-box:hover img{
+      transform:scale(1.1);
+    }
+
+    /* HOVER CAPTION */
+    .caption{
+      position:absolute;
+      bottom:0;
+      width:100%;
+      background:rgba(255,255,255,0.6);
+      backdrop-filter:blur(5px);
+      padding:15px;
+      font-size:14px;
+      transform:translateY(100%);
+      transition:0.4s;
+    }
+
+    .image-box:hover .caption{
+      transform:translateY(0);
+    }
+
+    /* LIGHTBOX */
+    .lightbox{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100vh;
+      background:rgba(0,0,0,0.9);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      opacity:0;
+      pointer-events:none;
+      transition:0.4s;
+      z-index:2000;
+    }
+
+    .lightbox img{
+      max-width:80%;
+      max-height:80%;
+      border-radius:10px;
+    }
+
+    .lightbox.active{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    /* CONTACT */
+    .contact{
+      text-align:center;
+      padding:80px;
+    }
+
+    .contact button{
+      padding:14px 35px;
+      border:none;
+      border-radius:40px;
+      background:#e5989b;
+      color:white;
+      font-size:14px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .contact button:hover{
+      background:#d67a84;
+    }
+
+    /* DARK TOGGLE */
+    .toggle{
+      position:fixed;
+      top:20px;
+      right:20px;
+      padding:8px 15px;
+      border:none;
+      border-radius:20px;
+      background:#333;
+      color:white;
+      cursor:pointer;
+      z-index:1000;
+    }
+
+    /* FILM GRAIN */
+    .film-grain{
+      position:fixed;
+      top:-50%;
+      left:-50%;
+      width:200%;
+      height:200%;
+      pointer-events:none;
+      background-image:url("https://grainy-gradients.vercel.app/noise.svg");
+      opacity:0.07;
+      animation:grain 8s steps(10) infinite;
+      z-index:999;
+    }
+
+    @keyframes grain{
+      0%,100%{transform:translate(0,0);}
+      50%{transform:translate(-5%,5%);}
+    }
+
+
+    /* FLOATING SOFT PARTICLES */
+
+    .particles{
+      position:fixed;
+      width:100%;
+      height:100vh;
+      top:0;
+      left:0;
+      overflow:hidden;
+      pointer-events:none;
+      z-index:0;
+    }
+
+    .particles span{
+      position:absolute;
+      display:block;
+      width:20px;
+      height:20px;
+      background:rgba(255, 182, 193, 0.3);
+      border-radius:50%;
+      animation:float 25s linear infinite;
+      bottom:-100px;
+    }
+
+    /* Different sizes */
+    .particles span:nth-child(odd){
+      width:12px;
+      height:12px;
+      background:rgba(221, 160, 221, 0.3);
+    }
+
+    .particles span:nth-child(3n){
+      width:18px;
+      height:18px;
+      background:rgba(255, 228, 225, 0.4);
+    }
+
+    /* Floating animation */
+    @keyframes float{
+      0%{
+        transform:translateY(0) scale(1);
+        opacity:0;
+      }
+      10%{
+        opacity:1;
+      }
+      100%{
+        transform:translateY(-120vh) scale(1.2);
+        opacity:0;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="particles"></div>
+
+<div class="film-grain"></div>
+<button class="toggle" onclick="toggleDark()">Dark Mode</button>
+
+<header>
+  <h1>DANISH'S GALLERY</h1>
+  <p>Photography for me is not looking, it's feeling.</p>
+</header>
+
+<div class="navbar">
+  <a href="#street">Street</a>
+  <a href="#nature">Nature</a>
+  <a href="#portraits">Portraits</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- STREET -->
+<section class="section" id="street">
+  <h2>Street</h2>
+  <div class="gallery">
+    <div class="image-box"><img src="https://images.unsplash.com/photo-1492724441997-5dc865305da7"><div class="caption">City Whispers</div></div>
+    <div class="image-box"><img src="https://images.unsplash.com/photo-1508051123996-69f8caf4891e"><div class="caption">Midnight Corners</div></div>
+    <div class="image-box"><img src="https://images.unsplash.com/photo-1520975918318-3a2f8b15d79f"><div class="caption">Urban Poetry</div></div>
+  </div>
+</section>
+
+<!-- NATURE -->
+<section class="section" id="nature">
+  <h2>Nature</h2>
+  <div class="gallery">
+    <div class="image-box"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470"><div class="caption">Golden Silence</div></div>
+    <div class="image-box"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"><div class="caption">Soft Horizons</div></div>
+    <div class="image-box"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e"><div class="caption">Dream Coast</div></div>
+  </div>
+</section>
+
+<!-- PORTRAITS -->
+<section class="section" id="portraits">
+  <h2>Portraits</h2>
+  <div class="gallery">
+    <div class="image-box"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9"><div class="caption">Quiet Strength</div></div>
+    <div class="image-box"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330"><div class="caption">Soft Gaze</div></div>
+    <div class="image-box"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1"><div class="caption">Elegance</div></div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <h2>Let's Create Together</h2>
+  <button onclick="alert('📞 +91 98765 43210')">Reveal Contact</button>
+</section>
+
+<div class="lightbox" id="lightbox">
+  <img src="" id="lightbox-img">
+</div>
+
+<script>
+
+  /* LIGHTBOX */
+  const images = document.querySelectorAll(".image-box img");
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+
+  images.forEach(img=>{
+    img.addEventListener("click",()=>{
+      lightbox.classList.add("active");
+      lightboxImg.src = img.src;
+    });
+  });
+
+  lightbox.addEventListener("click",()=>{
+    lightbox.classList.remove("active");
+  });
+
+  /* FADE IN SCROLL */
+  const sections = document.querySelectorAll(".section");
+  window.addEventListener("scroll",()=>{
+    sections.forEach(sec=>{
+      const top = sec.getBoundingClientRect().top;
+      if(top < window.innerHeight - 100){
+        sec.classList.add("show");
+      }
+    });
+  });
+
+  /* DARK MODE */
+  function toggleDark(){
+    document.body.classList.toggle("dark");
+  }
+
+</script>
+
+</body>
+</html>

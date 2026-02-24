@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catch The Dot - Retro Arcade</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <canvas id="bgCanvas" aria-hidden="true"></canvas>
+
+    <main class="app-shell">
+      <section id="startScreen" class="screen active">
+        <div class="card intro-card">
+          <h1>Catch The Dot</h1>
+          <p class="subtitle">Retro Trap Challenge</p>
+          <p class="screen-copy">Choose a level and start the arcade run.</p>
+
+          <div class="mode-picker" id="modePicker">
+            <button type="button" class="mode-chip active" data-mode="normal">Normal Mode</button>
+            <button type="button" class="mode-chip" data-mode="timed">Timed Mode</button>
+          </div>
+
+          <div class="level-picker" id="levelPicker"></div>
+
+          <button id="goToInstructionsBtn" class="action-btn" type="button">Play</button>
+        </div>
+      </section>
+
+      <section id="instructionScreen" class="screen">
+        <div class="card instruction-card">
+          <h2 id="instructionTitle">How To Play</h2>
+          <ul id="instructionList">
+            <li>Click gray circles to place orange blockers.</li>
+            <li>After each blocker, the blue dot moves one step.</li>
+            <li>Use strategy to block every possible path.</li>
+            <li>If dot reaches edge, you lose that level.</li>
+          </ul>
+          <p id="instructionHint" class="hint-line">Hint: Close nearby routes first, then seal edges.</p>
+          <div class="button-row">
+            <button id="backToStartBtn" class="ghost-btn" type="button">Back</button>
+            <button id="startGameBtn" class="action-btn" type="button">Start Level</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="gameScreen" class="screen">
+        <div class="game-layout">
+          <header class="hud">
+            <div class="hud-item">MODE <strong id="modeValue">NORMAL</strong></div>
+            <div class="hud-item"><span id="levelLabel">LEVEL</span> <strong id="levelValue">1</strong></div>
+            <div class="hud-item"><span id="clearedLabel">CLEARED</span> <strong id="clearedValue">0</strong></div>
+            <div class="hud-item">MOVES <strong id="movesValue">0</strong></div>
+            <div class="hud-item">TIME <strong id="timeValue">--</strong></div>
+            <div class="hud-item">BEST <strong id="bestValue">-</strong></div>
+          </header>
+
+          <section class="board-wrap">
+            <svg
+              id="gameBoard"
+              class="board-svg"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="xMidYMid meet"
+              role="img"
+              aria-label="Catch the dot game board"
+            ></svg>
+          </section>
+
+          <p id="message" class="message">Trap the dot before it escapes!</p>
+          <p id="hintText" class="hint-line">Hint: Build a wall in front of the dot's direction.</p>
+
+          <section class="controls">
+            <button id="restartLevelBtn" class="ghost-btn" type="button">Restart</button>
+            <button id="nextLevelBtn" class="action-btn" type="button">Next Level</button>
+            <button id="menuBtn" class="ghost-btn" type="button">Menu</button>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2026 Pink Canvas</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #F6F0D7, #4B9DA9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        canvas {
+            background: radial-gradient(circle at top, #F6F0D7, #4B9DA9);
+            box-shadow: 0 20px 40px rgba(255, 105, 180, 0.4);
+            border-radius: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<canvas id="canvas" width="600" height="350"></canvas>
+
+<script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    let textY = 180;
+    let direction = 1;
+
+    const bubbles = Array.from({ length: 12 }, () => ({
+        x: Math.random() * canvas.width,
+        y: canvas.height + Math.random() * 200,
+        radius: Math.random() * 8 + 4,
+        speed: Math.random() * 0.6 + 0.3
+    }));
+
+    function drawBackground() {
+        const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        gradient.addColorStop(0, "#B7BDF7");
+        gradient.addColorStop(1, "#576A8F");
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function drawText() {
+        ctx.textAlign = "center";
+        ctx.shadowColor = "rgba(255, 20, 147, 0.5)";
+        ctx.shadowBlur = 14;
+
+        // Elegant heading
+        ctx.font = "700 34px 'Playfair Display'";
+        ctx.fillStyle = "#b3005e";
+        ctx.fillText("Happy New Year!", canvas.width / 2, textY);
+
+        // Clean sub-text
+        ctx.font = "300 18px 'Poppins'";
+        ctx.fillText("Welcome to 2026!!!", canvas.width / 2, textY + 42);
+
+        ctx.shadowBlur = 0;
+    }
+
+    function drawBubbles() {
+        bubbles.forEach(bubble => {
+            ctx.beginPath();
+            ctx.arc(bubble.x, bubble.y, bubble.radius, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(255, 255, 255, 0.45)";
+            ctx.fill();
+
+            bubble.y -= bubble.speed;
+
+            if (bubble.y < -10) {
+                bubble.y = canvas.height + 20;
+                bubble.x = Math.random() * canvas.width;
+            }
+        });
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        drawBackground();
+        drawBubbles();
+        drawText();
+
+        textY += 0.3 * direction;
+        if (textY > 185 || textY < 170) direction *= -1;
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+</script>
+
+</body>
+</html>
+
+
